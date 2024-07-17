@@ -1,12 +1,18 @@
-import { readFileSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import { serve } from "bun";
 
-// Read and parse the configuration file
-const configFile = readFileSync("config.json", "utf8");
-const config = JSON.parse(configFile);
+// Initialize default values
+let port = 1212;
+let message = "หากต้องการแก้ไข port และ messege ให้แก้ไขใน config.json ที่อยู่ในโฟลเดอร์ระดับเดียวกันกับ bunwatcher.exe";
 
-const port = config.port || 3000;
-const message = config.message || "Hello, World!";
+// Check if config.json exists and read it
+if (existsSync("config.json")) {
+  const configFile = readFileSync("config.json", "utf8");
+  const config = JSON.parse(configFile);
+
+  port = config.port || port; // Use the port from config or default
+  message = config.message || message; // Use the message from config or default
+}
 
 const server = serve({
   fetch(req: Request): Response {
@@ -15,6 +21,7 @@ const server = serve({
   },
   port: Number(port),
 });
+
 
 console.log(`
     ███████████                           █████   ███   █████            █████             █████
