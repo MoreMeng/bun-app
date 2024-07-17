@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "build": "bun build --compile --minify --target=bun-windows-x64 ./src/server.ts --outfile ./dist/bunwatcher"
+  }
+}
